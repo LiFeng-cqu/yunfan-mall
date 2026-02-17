@@ -1,0 +1,116 @@
+spring:
+  cloud:
+
+    sentinel:
+      transport:
+        #配置sentinel dashboard地址
+        dashboard: localhost:8080
+
+    gateway:
+      routes:
+#        - id: test_route
+#          uri: https://www.baidu.com
+#          predicates:
+#            - Query=uri,baidu
+#
+#        - id: qq_route
+#          uri: https://www.qq.com
+#          predicates:
+#            - Query=uri,qq
+
+        - id: product_route
+          uri: lb://yunfan-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+
+        - id: coupon_route
+          uri: lb://yunfan-coupon
+          predicates:
+            - Path=/api/coupon/**
+          filters:
+            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+
+        - id: third_party_route
+          uri: lb://yunfan-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>/?.*),/$\{segment}
+
+        - id: member_route
+          uri: lb://yunfan-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+
+        - id: ware_route
+          uri: lb://yunfan-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+
+        - id: order_route
+          uri: lb://yunfan-order
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>/?.*), /renren-fast/$\{segment}
+
+        - id: yunfan_host_route
+          uri: lb://yunfan-product
+          predicates:
+            - Host=yunfan.com,item.yunfan.com
+
+        - id: yunfan_search_route
+          uri: lb://yunfan-search
+          predicates:
+            - Host=search.yunfan.com
+
+        - id: yunfan_auth_route
+          uri: lb://yunfan-auth-server
+          predicates:
+            - Host=auth.yunfan.com
+
+        - id: yunfan_cart_route
+          uri: lb://yunfan-cart
+          predicates:
+            - Host=cart.yunfan.com
+
+        - id: yunfan_order_route
+          uri: lb://yunfan-order
+          predicates:
+            - Host=order.yunfan.com
+
+        - id: yunfan_member_route
+          uri: lb://yunfan-member
+          predicates:
+            - Host=member.yunfan.com
+
+        - id: yunfan_seckill_route
+          uri: lb://yunfan-seckill
+          predicates:
+            - Host=seckill.yunfan.com
+
+
+
+#暴露所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+  ## 前端项目，/api
+## http://localhost:88/api/captcha.jpg   http://localhost:8080/renren-fast/captcha.jpg
+## http://localhost:88/api/product/category/list/tree http://localhost:10000/product/category/list/tree

@@ -3,33 +3,38 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.xunqi.gulimall</groupId>
-    <artifactId>gulimall</artifactId>
+    <groupId>com.yunfan.mall</groupId>
+    <artifactId>yunfan</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gulimall</name>
+    <name>yunfan</name>
     <description>聚合服务</description>
     <packaging>pom</packaging>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <modules>
-        <module>gulimall-common</module>
+        <module>yunfan-common</module>
 
-        <module>gulimall-coupon</module>
-        <module>gulimall-gateway</module>
-        <module>gulimall-member</module>
-        <module>gulimall-order</module>
-        <module>gulimall-search</module>
+        <module>yunfan-coupon</module>
+        <module>yunfan-gateway</module>
+        <module>yunfan-member</module>
+        <module>yunfan-order</module>
+        <module>yunfan-search</module>
 
-        <module>gulimall-product</module>
+        <module>yunfan-product</module>
 
-        <module>gulimall-ware</module>
-        <module>gulimall-seckill</module>
+        <module>yunfan-ware</module>
+        <module>yunfan-seckill</module>
         <module>renren-generator</module>
-        <module>gulimall-third-party</module>
+        <module>yunfan-third-party</module>
 
-        <module>gulimall-auth-server</module>
-        <module>gulimall-cart</module>
-        <module>gulimall-test-sso-client</module>
-        <module>gulimall-test-sso-server</module>
+        <module>yunfan-auth-server</module>
+        <module>yunfan-cart</module>
+        <module>yunfan-test-sso-client</module>
+        <module>yunfan-test-sso-server</module>
         <module>renren-fast</module>
 
     </modules>

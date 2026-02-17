@@ -51,8 +51,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.xunqi.gulimall</groupId>
-            <artifactId>gulimall-common</artifactId>
+            <groupId>com.yunfan.mall</groupId>
+            <artifactId>yunfan-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

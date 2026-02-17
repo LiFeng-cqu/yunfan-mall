@@ -1,4 +1,4 @@
-- 本sql公开在：https://github.com/FermHan/gulimall
+- 本sql公开在：https://github.com/FermHan/yunfan
 - 参考了视频评论区 特立独行ベ猫 大神的sql：https://github.com/1046762075/mall
 
 个人笔记地址：https://blog.csdn.net/hancoder/article/details/106922139
