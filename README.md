@@ -9,7 +9,7 @@
 
 ```
                     ┌──────────────────────────────┐
-   客户端/浏览器 ───►│   gulimall-gateway  网关       │
+   客户端/浏览器 ───►│   yunfan-gateway  网关       │
                     │  统一路由 · CORS · 鉴权入口    │
                     └──────┬───────────────────────┘
              ┌─────────────┼──────────────┬───────────┐
@@ -23,26 +23,26 @@
       │  cart     │ │ seckill   │ │   ware     │ │  coupon    │
       │ 购物车     │ │ 秒杀       │ │  仓储库存   │ │ 营销/券    │
       └───────────┘ └───────────┘ └────────────┘ └────────────┘
-      所有服务注册到 Nacos 并依赖 gulimall-common；第三方服务独立，供 OSS/短信等场景调用
+      所有服务注册到 Nacos 并依赖 yunfan-common；第三方服务独立，供 OSS/短信等场景调用
 ```
 
 ## 核心模块
 
 | 模块 | 职责 |
 | --- | --- |
-| `gulimall-common` | 通用模块：统一返回 `R` / 异常 / Feign / 常量与公共依赖 |
-| `gulimall-gateway` | 网关：统一路由、跨域、鉴权入口 |
-| `gulimall-product` | 商品服务：品牌 / 分类 / 属性(组) / SPU / SKU、商品上下架 |
-| `gulimall-search` | 检索服务：基于 Elasticsearch 的商品上架、检索与筛选 |
-| `gulimall-cart` | 购物车服务：Redis 购物车、临时/登录态购物车合并 |
-| `gulimall-order` | 订单服务：结算下单、订单状态机、RabbitMQ 延时关单、支付对接 |
-| `gulimall-ware` | 仓储服务：库存、采购、库存锁定 / 解锁、出库 |
-| `gulimall-member` | 会员服务：会员、积分、社交登录 |
-| `gulimall-coupon` | 营销服务：优惠券 / 秒杀场次等 |
-| `gulimall-seckill` | 秒杀服务：Redis 信号量预减 + RabbitMQ 异步下单 |
-| `gulimall-auth-server` | 认证中心：验证码注册登录、社交登录 OAuth2、SSO 演示 |
-| `gulimall-third-party` | 第三方服务：阿里云 OSS 上传、短信验证码 |
-| `gulimall-test-sso-client` / `gulimall-test-sso-server` | SSO 单点登录演示端 |
+| `yunfan-common` | 通用模块：统一返回 `R` / 异常 / Feign / 常量与公共依赖 |
+| `yunfan-gateway` | 网关：统一路由、跨域、鉴权入口 |
+| `yunfan-product` | 商品服务：品牌 / 分类 / 属性(组) / SPU / SKU、商品上下架 |
+| `yunfan-search` | 检索服务：基于 Elasticsearch 的商品上架、检索与筛选 |
+| `yunfan-cart` | 购物车服务：Redis 购物车、临时/登录态购物车合并 |
+| `yunfan-order` | 订单服务：结算下单、订单状态机、RabbitMQ 延时关单、支付对接 |
+| `yunfan-ware` | 仓储服务：库存、采购、库存锁定 / 解锁、出库 |
+| `yunfan-member` | 会员服务：会员、积分、社交登录 |
+| `yunfan-coupon` | 营销服务：优惠券 / 秒杀场次等 |
+| `yunfan-seckill` | 秒杀服务：Redis 信号量预减 + RabbitMQ 异步下单 |
+| `yunfan-auth-server` | 认证中心：验证码注册登录、社交登录 OAuth2、SSO 演示 |
+| `yunfan-third-party` | 第三方服务：阿里云 OSS 上传、短信验证码 |
+| `yunfan-test-sso-client` / `yunfan-test-sso-server` | SSO 单点登录演示端 |
 | `renren-fast` / `renren-generator` | 后台管理系统与代码生成器（人人开源脚手架） |
 | `db/` | 六库建表 SQL（admin / oms / pms / sms / ums / wms） |
 
@@ -56,16 +56,16 @@
 
 ### 环境前提
 
-- 中间件：MySQL 8、Redis、Nacos（2.x）、RabbitMQ；`gulimall-search` 另需 Elasticsearch。
-- 数据库：导入 `db/` 下六个 SQL（`gulimall_admin / oms / pms / sms / ums / wms`）。
+- 中间件：MySQL 8、Redis、Nacos（2.x）、RabbitMQ；`yunfan-search` 另需 Elasticsearch。
+- 数据库：导入 `db/` 下六个 SQL（`yunfan_admin / oms / pms / sms / ums / wms`）。
 - Nacos 配置中心：各服务通过 `bootstrap.yml` 按 namespace 拉取 `oss.yml` 等扩展配置，需先在 Nacos 建好对应命名空间与配置（课程标准做法）。
 - 各服务 `application.yml` 中的 MySQL / Redis 等地址需替换为你本机配置。
 
 ### 启动
 
 ```bash
-mvn clean install -DskipTests                     # 先构建 gulimall-common 等公共模块
-mvn -pl gulimall-order -am spring-boot:run        # 单服务启动示例（服务逐个启动）
+mvn clean install -DskipTests                     # 先构建 yunfan-common 等公共模块
+mvn -pl yunfan-order -am spring-boot:run        # 单服务启动示例（服务逐个启动）
 ```
 
 > 🔐 仓库内第三方云服务密钥（阿里云 OSS / 短信、微信 appsecret、支付宝商户私钥等）均已替换为 `REDACTED_*` 占位符，对接真实功能时替换为你自己的凭证。
