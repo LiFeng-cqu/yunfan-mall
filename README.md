@@ -33,7 +33,7 @@
 | `yunfan-common` | 通用模块：统一返回 `R` / 异常 / Feign / 常量与公共依赖 |
 | `yunfan-gateway` | 网关：统一路由、跨域、鉴权入口 |
 | `yunfan-product` | 商品服务：品牌 / 分类 / 属性(组) / SPU / SKU、商品上下架 |
-| `yunfan-search` | 检索服务：基于 Elasticsearch 的商品上架、检索与筛选 |
+| `yunfan-search` | 检索服务：基于 Elasticsearch 的商品上架、检索与筛选，支持自然语言 AI 检索 |
 | `yunfan-cart` | 购物车服务：Redis 购物车、临时/登录态购物车合并 |
 | `yunfan-order` | 订单服务：结算下单、订单状态机、RabbitMQ 延时关单、支付对接 |
 | `yunfan-ware` | 仓储服务：库存、采购、库存锁定 / 解锁、出库 |
@@ -45,6 +45,29 @@
 | `yunfan-test-sso-client` / `yunfan-test-sso-server` | SSO 单点登录演示端 |
 | `renren-fast` / `renren-generator` | 后台管理系统与代码生成器（人人开源脚手架） |
 | `db/` | 六库建表 SQL（admin / oms / pms / sms / ums / wms） |
+
+## ✨ AI 亮点：自然语言商品检索
+
+`yunfan-search` 提供 `/ai/search` 接口，用一句日常话就能搜商品，例如：
+
+```bash
+curl -X POST http://localhost:12001/ai/search \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"5000元以内的红色华为手机，要现货","summarize":true}'
+```
+
+实现思路（纯 Java 直调大模型，不依赖任何 AI 框架）：
+
+1. **意图解析**：把自然语言发给 DeepSeek（OpenAI 兼容协议 + JSON schema 约束），抽出 `keyword / brand / category / 价格区间 / 现货 / 排序` 等结构化条件；
+2. **名称桥接**：品牌名 / 分类名通过 ES 商品索引自带字段反查成内部 ID，再复用既有 `MallSearchService` 的聚合检索与分页，不重复造 DSL；
+3. **可控兜底**：模型输出不可控，解析失败自动降级为整句关键词检索；0 命中自动放宽硬条件；生成导购语失败不影响主结果——保证接口永远稳定返回。
+
+> 🔑 调用需要 DeepSeek Key，仅通过环境变量注入、**不落库**：
+> ```bash
+> set DEEPSEEK_API_KEY=sk-xxxx        # Windows
+> export DEEPSEEK_API_KEY=sk-xxxx     # Linux / macOS
+> ```
+> 未配置时 `/ai/search` 返回明确错误，不影响既有普通检索与全部网页端功能。
 
 ## 技术栈
 

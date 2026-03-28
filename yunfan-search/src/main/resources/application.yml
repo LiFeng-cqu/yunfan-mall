@@ -42,3 +42,14 @@ management:
     web:
       exposure:
         include: '*'
+
+# ===== AI 自然语言检索（DeepSeek）=====
+# API Key 绝不写进代码库：通过环境变量注入（或配置中心私有配置）。
+# 未配置 Key 时 /ai/search 会返回明确错误提示，不影响既有普通检索。
+yunfan:
+  ai:
+    deepseek:
+      base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+      api-key: ${DEEPSEEK_API_KEY:}
+      model: ${DEEPSEEK_MODEL:deepseek-chat}
+      timeout-seconds: 30
