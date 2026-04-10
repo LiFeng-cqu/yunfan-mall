@@ -60,6 +60,13 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>/?.*),/$\{segment}
 
+        - id: ai_route
+          uri: lb://yunfan-ai-server
+          predicates:
+            - Path=/api/ai/**
+          filters:
+            - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+
         - id: admin_route
           uri: lb://renren-fast
           predicates:
@@ -101,6 +108,11 @@ spring:
           uri: lb://yunfan-seckill
           predicates:
             - Host=seckill.yunfan.com
+
+        - id: yunfan_ai_route
+          uri: lb://yunfan-ai-server
+          predicates:
+            - Host=ai.yunfan.com
 
 
 

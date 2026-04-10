@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: yunfan-ai-server
+
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        # 复用既有命名空间（本地按需创建同名命名空间/配置即可，缺省配置不影响启动）
+        namespace: ca6d8a6d-f715-4efd-a06d-b07e911aa39e

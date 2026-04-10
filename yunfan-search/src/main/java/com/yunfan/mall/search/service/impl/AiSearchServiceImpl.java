@@ -2,7 +2,7 @@ package com.yunfan.mall.search.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.yunfan.common.es.SkuEsModel;
-import com.yunfan.mall.search.ai.DeepSeekClient;
+import com.yunfan.common.ai.DeepSeekClient;
 import com.yunfan.mall.search.ai.NlQueryFilter;
 import com.yunfan.mall.search.config.YunfanElasticSearchConfig;
 import com.yunfan.mall.search.constant.EsConstant;

@@ -6,6 +6,7 @@ import com.yunfan.common.utils.PageUtils;
 import com.yunfan.mall.order.entity.OrderEntity;
 import com.yunfan.mall.order.vo.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -38,6 +39,13 @@ public interface OrderService extends IService<OrderEntity> {
      * @return
      */
     OrderEntity getOrderByOrderSn(String orderSn);
+
+    /**
+     * 查询某会员最近若干条订单（供 AI 客服展示"我的订单"）
+     * @param memberId 会员 id
+     * @param limit 返回条数上限
+     */
+    List<OrderEntity> listRecentOrders(Long memberId, int limit);
 
     /**
      * 关闭订单

@@ -18,6 +18,8 @@
     <modules>
         <module>yunfan-common</module>
 
+        <module>yunfan-ai-server</module>
+
         <module>yunfan-coupon</module>
         <module>yunfan-gateway</module>
         <module>yunfan-member</module>

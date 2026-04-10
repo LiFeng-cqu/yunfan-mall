@@ -34,6 +34,7 @@
 | `yunfan-gateway` | 网关：统一路由、跨域、鉴权入口 |
 | `yunfan-product` | 商品服务：品牌 / 分类 / 属性(组) / SPU / SKU、商品上下架 |
 | `yunfan-search` | 检索服务：基于 Elasticsearch 的商品上架、检索与筛选，支持自然语言 AI 检索 |
+| `yunfan-ai-server` | AI 客服服务：DeepSeek function calling 编排订单查询/取消、售后政策问答（独立 AI 能力层） |
 | `yunfan-cart` | 购物车服务：Redis 购物车、临时/登录态购物车合并 |
 | `yunfan-order` | 订单服务：结算下单、订单状态机、RabbitMQ 延时关单、支付对接 |
 | `yunfan-ware` | 仓储服务：库存、采购、库存锁定 / 解锁、出库 |
@@ -68,6 +69,24 @@ curl -X POST http://localhost:12001/ai/search \
 > export DEEPSEEK_API_KEY=sk-xxxx     # Linux / macOS
 > ```
 > 未配置时 `/ai/search` 返回明确错误，不影响既有普通检索与全部网页端功能。
+
+### 智能售后客服 Agent（function calling）
+
+`yunfan-ai-server` 是独立 AI 服务，提供 `/ai/support` 对话接口。模型通过 **function calling** 决定调用哪个工具，本地执行后再总结回答：
+
+| 工具 | 动作 |
+| --- | --- |
+| `list_my_orders` / `order_detail` | 经 Feign 查 order 服务，读取当前会员的订单列表/详情 |
+| `cancel_pending_order` | 取消一笔「待付款」订单（复用 order 关单链路，写操作需模型先与用户确认） |
+| `policy_ask` | 从本地售后政策知识库取文案（退货退款/发货时效/运费/发票等） |
+
+边界设计（也是面试可讲的点）：
+
+1. **越权防护**：工具不带 `memberId`，识别靠共享 Session——浏览器先登录 `yunfan-ai-server`，Feign 透传 `GULISESSION` Cookie 给 order，order 自己的登录拦截器二次认人；Agent 拿不到、也改不了别人的订单。
+2. **写操作收敛**：取消订单只在模型拿到明确订单号后触发，且 order 侧仍校验状态必须是「待付款」。
+3. **可控兜底**：工具抛错不外泄，统一转成向用户转述的文案；多轮上下文缓存在 Redis（`ai:chat:{memberId}`，30 分钟）。
+
+`DeepSeekClient / DeepSeekProperties` 已下沉到 `yunfan-common`（纯 JDK HTTP 直调、无新增依赖），`yunfan-search` 与 `yunfan-ai-server` 共用同一份客户端，各自在本地显式注册 Bean、读取同一个 `yunfan.ai.deepseek.*` 配置。
 
 ## 技术栈
 

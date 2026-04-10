@@ -280,6 +280,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         return orderEntity;
     }
 
+    @Override
+    public List<OrderEntity> listRecentOrders(Long memberId, int limit) {
+        int size = Math.min(Math.max(limit, 1), 50);
+        return this.list(new QueryWrapper<OrderEntity>()
+                .eq("member_id", memberId)
+                .orderByDesc("create_time")
+                .last("limit " + size));
+    }
+
     /**
      * 关闭订单
      * @param orderEntity

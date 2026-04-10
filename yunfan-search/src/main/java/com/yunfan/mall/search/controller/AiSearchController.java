@@ -1,6 +1,6 @@
 package com.yunfan.mall.search.controller;
 
-import com.yunfan.mall.search.config.DeepSeekProperties;
+import com.yunfan.common.ai.DeepSeekProperties;
 import com.yunfan.mall.search.service.AiSearchService;
 import com.yunfan.mall.search.vo.AiSearchRequest;
 import com.yunfan.common.utils.R;
